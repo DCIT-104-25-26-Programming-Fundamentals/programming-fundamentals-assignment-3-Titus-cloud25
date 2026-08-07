@@ -84,4 +84,102 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+const readlineSync = require("readline-sync");
 
+let students = [];
+
+function calculateAverage(scores) {
+    let sum = 0;
+
+    for (let i = 0; i < scores.length; i++) {
+        sum += scores[i];
+    }
+
+    return sum / scores.length;
+}
+
+function addStudent() {
+    let name = question("Student name: ");
+    let id = questionInt("Student ID: ");
+    let count = questionInt("How many scores? ");
+
+    let scores = [];
+
+    for (let i = 0; i < count; i++) {
+        scores.push(questionInt("Enter score " + (i + 1) + ": "));
+    }
+
+    students.push({
+        name: name,
+        id: id,
+        scores: scores
+    });
+
+    console.log('Student "' + name + '" added successfully.');
+}
+
+function displayStudents() {
+    if (students.length === 0) {
+        console.log("No student records found.");
+        return;
+    }
+
+    console.log("\nName\t\tID\t\tScores\t\tAverage");
+
+    for (let i = 0; i < students.length; i++) {
+        console.log(
+            students[i].name + "\t" +
+            students[i].id + "\t" +
+            students[i].scores.join(", ") + "\t" +
+            calculateAverage(students[i].scores).toFixed(2)
+        );
+    }
+}
+
+function averageScore() {
+    let id = questionInt("Enter student ID: ");
+
+    for (let i = 0; i < students.length; i++) {
+        if (students[i].id === id) {
+            console.log(
+                students[i].name +
+                "'s average score: " +
+                calculateAverage(students[i].scores).toFixed(2)
+            );
+            return;
+        }
+    }
+
+    console.log("Student ID not found.");
+}
+
+function main() {
+    let choice;
+
+    do {
+        console.log("\n================================");
+        console.log("   STUDENT RECORD SYSTEM MENU");
+        console.log("================================");
+        console.log("1. Add student");
+        console.log("2. Display all students");
+        console.log("3. Calculate average score");
+        console.log("4. Quit");
+
+        choice = questionInt("Enter your choice (1-4): ");
+
+        if (choice === 1) {
+            addStudent();
+        } else if (choice === 2) {
+            displayStudents();
+        } else if (choice === 3) {
+            averageScore();
+        } else if (choice === 4) {
+            console.log("Goodbye!");
+        } else {
+            console.log("Invalid choice.");
+        }
+
+    } while (choice !== 4);
+}
+
+main();
